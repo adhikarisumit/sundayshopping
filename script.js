@@ -7,6 +7,7 @@ const itemlist = document.getElementById("item-list")
 const value = document.getElementById('value')
 const clearAll = document.getElementById('clear-all')
 const items = document.querySelectorAll('li')
+let isEditMode = false
 // console.log(`top ko items ${items}`)
 // console.log(addbtn)
 // console.log(`this is html before function ${inputForm.value}`)
@@ -43,6 +44,15 @@ function addItem(e) {
         // li.appendChild(button)
         // itemlist.appendChild(li);
         // inputForm.value = '';
+
+        if (isEditMode) {
+            const itemToEdit = itemlist.querySelector(".edit")
+            removeItemFromLocalStorage(itemToEdit.textContent)
+            itemToEdit.classList.remove('edit')
+            itemToEdit.remove()
+            isEditMode = false
+
+        }
         addItemtoDOM(inputValue)
         addItemtoLocalStorage(inputValue)
         noInput()
@@ -161,6 +171,11 @@ function noInput() {
         clearAll.style.display = 'block'
         filterInput.style.display = 'block'
     }
+    addbtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item'
+    addbtn.style.backgroundColor = "black"
+    addbtn.style.color = "white"
+    isEditMode = false
+
 
 }
 
@@ -172,26 +187,43 @@ function clearItems() {
 
 }
 
+function ItemEdit(item) {
+    isEditMode = true
+    itemlist.querySelectorAll('li').forEach(i => i.classList.remove('edit'))
+    item.classList.add('edit')
+    addbtn.innerHTML = ' <i class="fa-solid fa-pen"></i> Update Item'
+    addbtn.style.backgroundColor = "rgb(92, 243, 50)"
+    addbtn.style.color = "black"
+    inputForm.value = item.textContent
+
+
+}
 
 function onClickItem(e) {
     const btn = e.target.parentElement
     console.log(btn)
+
     //yedi class ma btn-list xa vaney maatra delete garney
-    if (btn.classList.contains('btn-list'))
-        // if (confirm("Are you confirm to delete")) {
-        //     btn.parentElement.remove()
-        // }
+    // if (confirm("Are you confirm to delete")) {
+    //     btn.parentElement.remove()
+    // }
+    if (btn.classList.contains('btn-list')) {
         console.log(btn.parentElement)
-    removeItem(btn.parentElement)
+        removeItem(btn.parentElement)
+    }
+    else {
+        // alert("update")
+        ItemEdit(e.target)
+    }
 }
 
 function removeItem(item) {
     console.log(item)
-    if (confirm("Are you confirm to delete")) {
+    if (confirm("delete garni")) {
         item.remove()
+        console.log(item.textContent)
+        removeItemFromLocalStorage(item.textContent)
     }
-    console.log(item.textContent)
-    removeItemFromLocalStorage(item.textContent)
 
 
     noInput()
