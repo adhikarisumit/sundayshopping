@@ -53,6 +53,10 @@ function addItem(e) {
             isEditMode = false
 
         }
+        if (duplicateItem(inputValue)) {
+            alert(`${inputValue} already exists`)
+            return
+        }
         addItemtoDOM(inputValue)
         addItemtoLocalStorage(inputValue)
         noInput()
@@ -198,6 +202,18 @@ function ItemEdit(item) {
 
 
 }
+
+function duplicateItem(item) {
+    const itemsFromStorage = getItemsfromLocalStorage()
+    if (itemsFromStorage.includes(item)) {
+        return true
+    }
+    else {
+        return false
+    }
+}
+// const res = duplicateItem("orange")
+// console.log(res)
 
 function onClickItem(e) {
     const btn = e.target.parentElement
