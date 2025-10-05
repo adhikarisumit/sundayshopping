@@ -167,22 +167,51 @@ function noInput() {
 
 function clearItems() {
     itemlist.innerHTML = ''
+    localStorage.clear()
     noInput()
 
 }
 
-function removeItem(e) {
 
+function onClickItem(e) {
     const btn = e.target.parentElement
-    // console.log(btn)
+    console.log(btn)
     //yedi class ma btn-list xa vaney maatra delete garney
     if (btn.classList.contains('btn-list'))
-        if (confirm("Are you confirm to delete")) {
-            btn.parentElement.remove()
-        }
+        // if (confirm("Are you confirm to delete")) {
+        //     btn.parentElement.remove()
+        // }
+        console.log(btn.parentElement)
+    removeItem(btn.parentElement)
+}
+
+function removeItem(item) {
+    console.log(item)
+    if (confirm("Are you confirm to delete")) {
+        item.remove()
+    }
+    console.log(item.textContent)
+    removeItemFromLocalStorage(item.textContent)
+
+
     noInput()
 
 }
+
+function removeItemFromLocalStorage(item) {//sandip
+    let itemsfromLocalStorage = getItemsfromLocalStorage()
+    // console.log(itemsfromLocalStorage)
+
+    //[banana,sandip,mango]
+    itemsfromLocalStorage = itemsfromLocalStorage.filter(i => i != item) //banana !==sandip true sandi!=sandip false
+    console.log(itemsfromLocalStorage)
+    localStorage.setItem('items', JSON.stringify(itemsfromLocalStorage))
+
+}
+// removeItemFromLocalStorage("sandip")
+
+
+
 
 function filterItems(e) {
     const liItems = document.querySelectorAll('li')
@@ -211,7 +240,7 @@ function filterItems(e) {
 
 }
 
-itemlist.addEventListener("click", removeItem)
+itemlist.addEventListener("click", onClickItem)
 itemForm.addEventListener("submit", addItem)
 clearAll.addEventListener("click", clearItems)
 filterInput.addEventListener('input', filterItems)
